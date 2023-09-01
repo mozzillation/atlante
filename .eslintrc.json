@@ -1,3 +1,8 @@
 {
-  "extends": "next/core-web-vitals"
+    "extends": "next/core-web-vitals",
+    "plugins": ["prefer-arrow-functions"],
+    "rules": {
+        "no-console": "warn",
+        "prefer-arrow-callback": "warn"
+    }
 }
