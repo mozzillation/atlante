@@ -16,11 +16,8 @@ const Header: React.FC<Props> = () => {
             <Wrapper>
                 <div className='flex flex-row justify-end'>
                     <nav className='flex justify-between content-center items-center w-max gap-2'>
-                        <Button href='/'>Home</Button>
                         <Button href='/directory'>Directory</Button>
-
-                        {!session && <SignInButton />}
-
+                        {session.status === 'unauthenticated' && <SignInButton />}
                         <SubmitButton href='/submit' />
                     </nav>
                 </div>
