@@ -11,7 +11,7 @@ type Params = {
     }
 }
 
-export const GET = async (res: Response, { params }: Params) => {
+export const GET = async (req: Request, { params }: Params) => {
     const session = await getServerSession(authOptions)
     const { id } = params
 
