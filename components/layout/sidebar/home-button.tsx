@@ -6,7 +6,7 @@ import { Globe } from '@phosphor-icons/react'
 const HomeButton = () => {
     return (
         <Link href='/'>
-            <button className='w-[40px] h-[40px] rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors flex items-center content-center justify-center'>
+            <button className='w-10 h-10 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors flex items-center content-center justify-center'>
                 <Globe size={24} />
             </button>
         </Link>

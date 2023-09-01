@@ -1,11 +1,11 @@
-import { SavedWebsites } from '@/components/organisms'
+import { ProfileDetails, SavedWebsites } from '@/components/organisms'
 
 export const dynamic = 'force-dynamic'
 
 const MePage = () => {
     return (
         <>
-            <div>me page</div>
+            <ProfileDetails />
 
             <SavedWebsites />
         </>

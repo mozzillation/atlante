@@ -1,6 +1,7 @@
 import { error } from 'console'
 import prisma from './prisma'
 import { WebsiteWithSaves } from '@/types'
+import { directus_users } from '@prisma/client'
 
 export const getAllWebsitesQuery = async (
     user_id: string | undefined,
@@ -89,6 +90,14 @@ export const getWebsiteQuery = async ({
                 isSaved: website.save.some((i) => i.user_id === user_id),
             }
         })
+}
+
+export const getProfileQuery = async (user_id: string): Promise<directus_users> => {
+    return await prisma.directus_users.findUniqueOrThrow({
+        where: {
+            id: user_id,
+        },
+    })
 }
 
 type ToggleSaveFunction = {

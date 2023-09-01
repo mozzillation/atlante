@@ -29,7 +29,7 @@ const WebsiteCard: React.FC<Props> = ({
     return (
         <article
             id='website'
-            data-id={id}
+            key={id}
             className='bg-white rounded-md overflow-hidden tracking-wide border-2 border-gray-50'
         >
             <header className='p-3 flex flex-row justify-between'>

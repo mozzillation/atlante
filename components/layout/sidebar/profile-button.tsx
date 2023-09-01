@@ -29,7 +29,7 @@ const ProfileButton: React.FC<Props> = ({ avatar, first_name }) => {
                     animate='animate'
                     whileHover={{ scale: 1.05, y: -5 }}
                 >
-                    <Avatar className='w-[40px] h-[40px] rounded-lg shadow-md border-2 border-white'>
+                    <Avatar className='w-10 h-10 rounded-lg shadow-md border-2 border-white'>
                         {avatar && <AvatarImage src={imageUrl(avatar, 'thumbnail')} />}
                         <AvatarFallback>{first_name?.slice(0, 1)}</AvatarFallback>
                     </Avatar>
