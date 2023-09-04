@@ -406,7 +406,7 @@ model style {
 
 model type {
   id         String   @id @db.Uuid
-  name       String?  @unique(map: "type_name_unique") @db.VarChar(255)
+  name       String   @unique(map: "type_name_unique") @db.VarChar(255)
   website_id String?  @db.Uuid
   slug       String   @unique(map: "type_slug_unique") @db.VarChar(255)
   website    website? @relation(fields: [website_id], references: [id], onUpdate: NoAction, map: "type_website_id_foreign")

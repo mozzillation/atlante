@@ -26,6 +26,11 @@ export const authOptions: NextAuthOptions = {
                 user,
             }
         },
+        async redirect({ url, baseUrl }) {
+            if (url.startsWith('/')) return `${baseUrl}${url}`
+            else if (new URL(url).origin === baseUrl) return url
+            return baseUrl
+        },
         async signIn({ profile }) {
             const user = await prisma.directus_users.findUnique({
                 where: {

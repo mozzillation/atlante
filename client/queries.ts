@@ -1,7 +1,9 @@
-import { error } from 'console'
+'use server'
+
 import prisma from './prisma'
 import { WebsiteWithSaves } from '@/types'
-import { directus_users } from '@prisma/client'
+import { directus_users, style, type } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
 
 export const getAllWebsitesQuery = async (
     user_id: string | undefined,
@@ -11,6 +13,11 @@ export const getAllWebsitesQuery = async (
             include: {
                 save: true,
             },
+            orderBy: [
+                {
+                    date_created: 'desc',
+                },
+            ],
         })
         .then((res) => {
             if (user_id) {
@@ -37,7 +44,7 @@ export const getAllWebsitesQuery = async (
 export const getSavedWebsitesQuery = async (
     user_id: string | undefined,
 ): Promise<WebsiteWithSaves[]> => {
-    if (!user_id) throw error
+    if (!user_id) throw 'Not logged'
 
     return await prisma.website
         .findMany({
@@ -123,5 +130,27 @@ export const toggleSave = async ({ website_id, user_id, isSaved }: ToggleSaveFun
                 user_id,
             },
         })
+    }
+}
+
+export const getAllCategoriesQuery = async () => {
+    const types = await prisma.type.findMany({
+        orderBy: [
+            {
+                name: 'asc',
+            },
+        ],
+    })
+    const styles = await prisma.style.findMany({
+        orderBy: [
+            {
+                name: 'asc',
+            },
+        ],
+    })
+
+    return {
+        types,
+        styles,
     }
 }

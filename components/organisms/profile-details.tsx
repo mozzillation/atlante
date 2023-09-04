@@ -16,6 +16,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { signOut } from 'next-auth/react'
+import { DotsThreeVertical } from '@phosphor-icons/react'
 
 type Props = Partial<directus_users>
 
@@ -34,7 +36,7 @@ const ProfileDetails: React.FC<Props> = () => {
                             <AvatarImage src={imageUrl(user.avatar, 'thumbnail')} />
 
                             <AvatarFallback>
-                                <div className='w-max h-max text-2xl'>
+                                <div className='w-max h-max text-3xl'>
                                     {user.first_name.slice(0, 1)}
                                 </div>
                             </AvatarFallback>
@@ -49,11 +51,18 @@ const ProfileDetails: React.FC<Props> = () => {
 
                     <div className='shrink-0'>
                         <DropdownMenu>
-                            <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+                            <DropdownMenuTrigger>
+                                <div className='p-2 rounded-lg leading-6  transition-colors hover:bg-gray-100 active:bg-gray-200'>
+                                    <DotsThreeVertical size={24} />
+                                </div>
+                            </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem>Edit Profile</DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem className='text-red-400 focus:text-red-400 focus:bg-red-100'>
+                                <DropdownMenuItem
+                                    className='text-red-400 focus:text-red-400 focus:bg-red-100'
+                                    onClick={() => signOut()}
+                                >
                                     Sign Out
                                 </DropdownMenuItem>
                             </DropdownMenuContent>

@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect, useMemo, useState, useTransition } from 'react'
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { mutate } from 'swr'
+import { useRouter } from 'next/navigation'
+import { toggleSave } from '@/client/queries'
 
 type Props = {
     isSaved: boolean
@@ -29,33 +31,25 @@ const variants = {
 }
 
 const SaveButton: React.FC<Props> = ({ user_id, website_id, isSaved }) => {
+    const router = useRouter()
     const [isPending, startTransition] = useTransition()
-    const [cloneIsSaved, setSaved] = useState(isSaved)
-
-    useMemo(() => {
-        setSaved(isSaved)
-    }, [isSaved])
 
     const handleSave = async () => {
         startTransition(async () => {
             if (!website_id) return
 
             if (!user_id) {
-                // You must be authenticated
-                // console.log('not valide')
+                router.push('/sign-in')
                 return
             }
 
-            const res = await fetch('/api/save', {
-                method: 'POST',
-                body: JSON.stringify({
-                    user_id,
-                    website_id,
-                    isSaved: cloneIsSaved,
-                }),
+            await toggleSave({
+                website_id,
+                user_id,
+                isSaved,
             })
 
-            setSaved((prev) => !prev)
+            mutate('/api/website/all')
             mutate('/api/website/saved')
         })
     }
@@ -67,7 +61,7 @@ const SaveButton: React.FC<Props> = ({ user_id, website_id, isSaved }) => {
                 layout
                 transition={transition}
                 className={`${
-                    cloneIsSaved
+                    isSaved
                         ? `bg-green-300 text-green-700 hover:bg-green-400 active:bg-green-500`
                         : `bg-gray-50 text-black hover:bg-gray-100 active:bg-gray-200`
                 } w-fit p-2 rounded-md text-xs transition-colors select-none ${
@@ -76,7 +70,7 @@ const SaveButton: React.FC<Props> = ({ user_id, website_id, isSaved }) => {
                 whileTap={{ scale: 0.95, transition: { duration: 0.1 } }}
             >
                 <LayoutGroup>
-                    {cloneIsSaved && (
+                    {isSaved && (
                         <motion.div layout className='w-max'>
                             <motion.div
                                 layout
@@ -90,7 +84,7 @@ const SaveButton: React.FC<Props> = ({ user_id, website_id, isSaved }) => {
                         </motion.div>
                     )}
 
-                    {!cloneIsSaved && (
+                    {!isSaved && (
                         <motion.div layout className='w-max'>
                             <motion.div
                                 layout
