@@ -48,9 +48,6 @@ const SaveButton: React.FC<Props> = ({ user_id, website_id, isSaved }) => {
                 user_id,
                 isSaved,
             })
-
-            mutate('/api/website/all')
-            mutate('/api/website/saved')
         })
     }
 

@@ -1,29 +1,22 @@
-'use client'
-
 import { Grid, Wrapper } from '../layout'
 import { WebsiteCard } from '../cards'
-import { WebsiteWithSaves } from '@/types'
-import useSWR from 'swr'
-import { fetcher } from '@/utils/fetcher'
-import { useSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { getAllWebsitesQuery } from '@/client/queries'
 
-const AllWebsites: React.FC = () => {
-    const { data } = useSession()
+const getAllWebsite = async (user_id: string | undefined) => {
+    return await getAllWebsitesQuery(user_id)
+}
 
-    const {
-        data: websites,
-        isLoading,
-        error,
-    } = useSWR<WebsiteWithSaves[]>('/api/website/all', fetcher)
-
-    if (error) return <div>error</div>
-    if (isLoading) return <div>isLoading</div>
+const AllWebsites: React.FC = async () => {
+    const session = await getServerSession(authOptions)
+    const websites = await getAllWebsite(session?.user.id)
 
     return (
         <Wrapper>
             <Grid>
                 {websites?.map((website, index) => (
-                    <WebsiteCard {...website} key={index} user_id={data?.user.id} />
+                    <WebsiteCard {...website} key={website.id} user_id={session?.user.id} />
                 ))}
             </Grid>
         </Wrapper>

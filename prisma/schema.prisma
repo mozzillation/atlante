@@ -435,6 +435,7 @@ model save {
   id             Int            @id @default(autoincrement())
   website_id     String         @db.Uuid
   user_id        String         @db.Uuid
+  date_created   DateTime       @db.Timestamptz(6)
   directus_users directus_users @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "save_user_id_foreign")
   website        website        @relation(fields: [website_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "save_website_id_foreign")
 }

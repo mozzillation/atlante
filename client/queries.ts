@@ -1,8 +1,8 @@
 'use server'
 
 import prisma from './prisma'
-import { WebsiteWithSaves } from '@/types'
-import { directus_users, style, type } from '@prisma/client'
+import { SaveWithWebsite, WebsiteWithSaves } from '@/types'
+import { directus_users, save, style, type, website } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 
 export const getAllWebsitesQuery = async (
@@ -43,29 +43,32 @@ export const getAllWebsitesQuery = async (
 
 export const getSavedWebsitesQuery = async (
     user_id: string | undefined,
-): Promise<WebsiteWithSaves[]> => {
+): Promise<SaveWithWebsite[]> => {
     if (!user_id) throw 'Not logged'
 
-    return await prisma.website
+    return await prisma.save
         .findMany({
             where: {
-                save: {
-                    some: {
-                        user_id: {
-                            equals: user_id,
-                        },
-                    },
+                user_id,
+                website: {
+                    status: 'published',
                 },
             },
             include: {
-                save: true,
+                website: true,
+            },
+            orderBy: {
+                date_created: 'desc',
             },
         })
         .then((res) => {
-            return res.map((website) => {
+            return res.map((save) => {
                 return {
-                    ...website,
-                    isSaved: website.save.some((i) => i.user_id === user_id),
+                    ...save,
+                    website: {
+                        ...save.website,
+                        isSaved: true,
+                    },
                 }
             })
         })
@@ -128,9 +131,13 @@ export const toggleSave = async ({ website_id, user_id, isSaved }: ToggleSaveFun
             data: {
                 website_id,
                 user_id,
+                date_created: new Date(),
             },
         })
     }
+
+    revalidatePath('/')
+    revalidatePath('/me')
 }
 
 export const getAllCategoriesQuery = async () => {

@@ -50,13 +50,13 @@ const WebsiteCard: React.FC<Props> = ({
     thumbnail,
     url,
     date_created,
+    ...props
 }) => {
     const [isHovered, setHover] = useState<boolean>(false)
 
     return (
         <article
             id='website'
-            key={id}
             className='bg-white rounded-md overflow-hidden tracking-wide border-2 border-gray-50'
         >
             <header className='p-3 flex flex-row justify-between'>
@@ -73,7 +73,7 @@ const WebsiteCard: React.FC<Props> = ({
                 onMouseLeave={() => setHover(false)}
             >
                 <a href={url} target='_blank' rel='noreferrer noopener'>
-                    <motion.figure className='aspect-video bg-gray-50 relative border-t border-b border-gray-10'>
+                    <motion.figure className='aspect-video bg-gray-50 relative border-t border-b border-gray-100'>
                         {thumbnail && (
                             <Image
                                 src={imageUrl(thumbnail, 'thumbnail')}
@@ -90,7 +90,7 @@ const WebsiteCard: React.FC<Props> = ({
                                     animate='animate'
                                 >
                                     <motion.div
-                                        className='p-2 bg-white text-stone-950 rounded-full'
+                                        className='p-2 bg-white text-gray-950 rounded-full'
                                         variants={buttonVariants}
                                         initial='initial'
                                         animate='animate'

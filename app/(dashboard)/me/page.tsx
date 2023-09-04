@@ -1,6 +1,6 @@
 import { ProfileDetails, SavedWebsites } from '@/components/organisms'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 const MePage = () => {
     return (
