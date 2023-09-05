@@ -9,7 +9,7 @@ const PageLayout: React.FC<Props> = ({ children }) => {
     return (
         <div className='flex flex-row float-left w-full'>
             <Sidebar />
-            <div className='w-full sticky top-0 min-h-[300vh]'>
+            <div className='w-full sticky top-0 min-h-[300vh] bg-gray-50'>
                 <Header />
                 <main>{children}</main>
             </div>

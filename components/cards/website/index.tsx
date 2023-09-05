@@ -53,22 +53,24 @@ const WebsiteCard: React.FC<Props> = ({
     const [isHovered, setHover] = useState<boolean>(false)
 
     return (
-        <article className='bg-white rounded-md overflow-hidden tracking-wide border-2 border-gray-50'>
-            <header className='p-3 flex flex-row justify-between'>
+        <article className='bg-white rounded-md overflow-hidden tracking-wide shadow-lg'>
+            <header className='p-3 flex flex-row justify-between gap-1'>
                 <Link href={`/w/${id}`}>
-                    <div className='text-xs font-semibold hover:text-gray-500 transition-colors'>
+                    <div className='text-xs font-semibold hover:text-gray-500 transition-colors truncate w-full overflow-hidden'>
                         {name}
                     </div>
                 </Link>
-                <time className='text-xs text-gray-400'>{dayjs(date_created).fromNow()}</time>
+                <time className='text-xs text-gray-400 truncate overflow-hidden '>
+                    {dayjs(date_created).fromNow()}
+                </time>
             </header>
             <motion.div
                 className='relative'
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
             >
-                <a href={url} target='_blank' rel='noreferrer noopener'>
-                    <motion.figure className='aspect-video bg-gray-50 relative border-t border-b border-gray-100'>
+                <a href={`${url}/?ref=atlante.gallery`} target='_blank' rel='noreferrer noopener'>
+                    <motion.figure className='aspect-video bg-gray-50 relative border-t-2 border-b-2 border-gray-100'>
                         {thumbnail && (
                             <Image
                                 src={imageUrl(thumbnail, 'thumbnail')}

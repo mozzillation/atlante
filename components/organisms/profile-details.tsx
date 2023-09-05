@@ -4,6 +4,8 @@ import { getProfileQuery } from '@/client/queries'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { notFound } from 'next/navigation'
+import { SignOutButton } from '../atoms'
+import { SavedWebsites } from '.'
 
 const getUserDetails = async () => {
     const session = await getServerSession(authOptions)
@@ -16,7 +18,7 @@ const ProfileDetails: React.FC = async () => {
     const user = await getUserDetails()
 
     return (
-        <div>
+        <section className='py-4 space-y-4'>
             <MiniWrapper>
                 <div className='flex gap-4 flex-row items-center content-center'>
                     <div>
@@ -24,15 +26,19 @@ const ProfileDetails: React.FC = async () => {
                     </div>
 
                     <div className='shrink w-full'>
-                        <h2 className='text-lg tracking-wide'>
+                        <h2 className='text-lg tracking-wide font-medium'>
                             {user.first_name} {user.last_name}
                         </h2>
+                        <div>
+                            <SignOutButton />
+                        </div>
                     </div>
 
                     <div className='shrink-0'></div>
                 </div>
             </MiniWrapper>
-        </div>
+            <SavedWebsites />
+        </section>
     )
 }
 

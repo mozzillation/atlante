@@ -13,11 +13,14 @@ const SavedWebsites: React.FC = async () => {
     const saves = await getSavedWebsitesQuery()
 
     return (
-        <Wrapper>
-            <Grid>
-                {saves?.map((save, index) => <WebsiteCard {...save.website} key={index} />)}
-            </Grid>
-        </Wrapper>
+        <div className='bg-gray-50 min-h-full'>
+            <Wrapper>
+                <h2 className='text-xs tracking-widest text-gray-400 pt-4'>Saved Websites</h2>
+                <Grid>
+                    {saves?.map((save, index) => <WebsiteCard {...save.website} key={index} />)}
+                </Grid>
+            </Wrapper>
+        </div>
     )
 }
 

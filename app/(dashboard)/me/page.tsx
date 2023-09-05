@@ -7,8 +7,6 @@ const MePage = () => {
     return (
         <>
             <ProfileDetails />
-
-            <SavedWebsites />
         </>
     )
 }

@@ -31,14 +31,7 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
 
     const handleSave = async () => {
         startTransition(async () => {
-            console.log('clicckato')
-
             if (!website_id) return
-
-            // if (!user_id) {
-            //     router.push('/sign-in')
-            //     return
-            // }
 
             await toggleSave({
                 website_id,

@@ -17,7 +17,7 @@ const SingleWebsite: React.FC<Props> = async ({ id }) => {
 
     return (
         <section id='website' data-id={website.id} className='py-4'>
-            <div className='flex justify-center flex-col gap-10 items-center content-center'>
+            <div className='flex justify-center flex-col space-y-4 items-center content-center'>
                 <MiniWrapper>
                     <header className='tracking-wider'>
                         <div className='text-xs text-gray-400 leading-relaxed'>

@@ -199,6 +199,13 @@ export const getAllCategoriesQuery = async () => {
             orderBy: {
                 name: 'asc',
             },
+            include: {
+                _count: {
+                    select: {
+                        website_category: true,
+                    },
+                },
+            },
         })
         .then((res) => {
             const types = res.filter((category) => category.collection === 'type')
@@ -252,6 +259,11 @@ export const getWebsitesByCategoryQuery = async ({ collection, slug }: GetWebsit
                     },
                 },
             },
+            orderBy: [
+                {
+                    date_created: 'desc',
+                },
+            ],
             include: {
                 save: true,
             },
