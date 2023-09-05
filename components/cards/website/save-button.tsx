@@ -3,6 +3,7 @@
 import { useTransition } from 'react'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import { toggleSave } from '@/client/queries'
+import { Bookmark, BookmarkSimple, HeartStraight } from '@phosphor-icons/react'
 
 type Props = {
     isSaved: boolean
@@ -49,8 +50,8 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
                 className={`${
                     isSaved
                         ? `bg-green-300 text-green-700 hover:bg-green-400 active:bg-green-500`
-                        : `bg-gray-50 text-black hover:bg-gray-100 active:bg-gray-200`
-                } w-fit p-2 rounded-md text-xs transition-colors select-none ${
+                        : `bg-gray-200 text-black hover:bg-gray-300 active:bg-gray-400`
+                } w-fit p-2 rounded-md text-xs transition-colors tracking-wider select-none ${
                     isPending ? `opacity-50 cursor-wait` : `cursor-pointer`
                 }`}
                 whileTap={{ scale: 0.95, transition: { duration: 0.1 } }}
@@ -64,8 +65,10 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
                                 initial='initial'
                                 animate='animate'
                                 exit='exit'
+                                className='flex flex-row gap-1'
                             >
-                                Saved
+                                <BookmarkSimple size={16} weight='duotone' />
+                                <span>Saved</span>
                             </motion.div>
                         </motion.div>
                     )}
@@ -78,8 +81,10 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
                                 initial='initial'
                                 animate='animate'
                                 exit='exit'
+                                className='flex flex-row gap-1'
                             >
-                                Save
+                                <BookmarkSimple size={16} />
+                                <span>Save</span>
                             </motion.div>
                         </motion.div>
                     )}

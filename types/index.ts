@@ -2,6 +2,7 @@ import { category, save, website } from '@prisma/client'
 
 export type WebsiteWithSaves = website & {
     isSaved: boolean
+    save: save[]
 }
 
 export type Categories = {
