@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
                     const imagePayload = {
                         url: profile.picture,
                         data: {
-                            folder: '39735b51-28f5-43a8-8fd5-e4d78b8e9e1a', // Avatar Assets folder,
+                            folder: process.env.AVATAR_FOLDER, // Avatar Assets folder,
                             title: nanoid(),
                         },
                     }
@@ -70,10 +70,10 @@ export const authOptions: NextAuthOptions = {
                         avatar: data.id,
                         provider: 'google',
                         external_identifier: profile.email,
-                        role: '6a8575a2-c05a-4f49-90c6-7fc878029b23', // Basic User
+                        role: process.env.USER_ROLE, // Basic User
                     }
 
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_DIRECTUS_URL}}/users`, {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_DIRECTUS_URL}/users`, {
                         method: 'POST',
                         body: JSON.stringify(payload),
                         headers: {
@@ -82,6 +82,7 @@ export const authOptions: NextAuthOptions = {
                         },
                         credentials: 'include',
                     })
+
                     const user = await res.json()
                 } catch (error) {
                     throw error

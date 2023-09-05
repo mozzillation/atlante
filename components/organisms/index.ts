@@ -5,6 +5,7 @@ import PageLayout from './page-layout'
 import ProfileDetails from './profile-details'
 import SignIn from './sign-in'
 import CategoryList from './category-list'
+import CategoryDetails from './category-details'
 
 export {
     AllWebsites,
@@ -14,4 +15,5 @@ export {
     ProfileDetails,
     SignIn,
     CategoryList,
+    CategoryDetails,
 }

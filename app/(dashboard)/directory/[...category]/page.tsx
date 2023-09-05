@@ -1,4 +1,7 @@
+import { generateCategoriesSlugs, getAllCategoriesQuery, getCategoryQuery } from '@/client/queries'
+import { CategoryDetails } from '@/components/organisms'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 type Props = {
     params: {
@@ -6,22 +9,28 @@ type Props = {
     }
 }
 
-enum Group {
-    'style',
-    'type',
-}
-
-const CategoryPage: React.FC<Props> = ({ params }) => {
-    const group = params.category[0] as 'style' | 'type'
+export const generateMetadata = async ({ params }: Props) => {
+    const collection = params.category[0] as 'style' | 'type'
     const slug = params.category[1] as string
 
-    if (!group || !slug) notFound()
+    const category = await getCategoryQuery({
+        collection,
+        slug,
+    })
 
-    return (
-        <div>
-            {group} {slug}
-        </div>
-    )
+    if (!category) notFound()
+
+    return {
+        title: `All ${category.name} Websites`,
+        description: category.description,
+    }
+}
+
+const CategoryPage: React.FC<Props> = async ({ params }) => {
+    const collection = params.category[0] as 'style' | 'type'
+    const slug = params.category[1] as string
+
+    return <CategoryDetails collection={collection} slug={slug} />
 }
 
 export default CategoryPage

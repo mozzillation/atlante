@@ -1,16 +1,10 @@
-'use client'
-
-import { WebsiteWithSaves } from '@/types'
-import { fetcher } from '@/utils/fetcher'
-import { useSession } from 'next-auth/react'
-import { notFound } from 'next/navigation'
-import useSWR from 'swr'
 import { MiniWrapper } from '../layout'
-import { imageUrl, placeholderUrl } from '@/utils/image'
+import { imageUrl } from '@/utils/image'
 import Image from 'next/image'
 import dayjs from 'dayjs'
 
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { getWebsiteQuery } from '@/client/queries'
 
 dayjs.extend(relativeTime)
 
@@ -18,19 +12,8 @@ type Props = {
     id: string
 }
 
-const SingleWebsite: React.FC<Props> = ({ id }) => {
-    const { data } = useSession()
-
-    const {
-        data: website,
-        isLoading,
-        error,
-    } = useSWR<WebsiteWithSaves>(id ? '/api/website/' + id : null, fetcher)
-
-    if (error) notFound()
-    if (isLoading) return <div>is loading</div>
-
-    if (!website) notFound()
+const SingleWebsite: React.FC<Props> = async ({ id }) => {
+    const website = await getWebsiteQuery(id)
 
     return (
         <section id='website' data-id={website.id} className='py-4'>
@@ -43,9 +26,11 @@ const SingleWebsite: React.FC<Props> = ({ id }) => {
                         <h1 className='text-2xl  text-gray-950 leading-relaxed font-semibold'>
                             {website.name}
                         </h1>
-                        <div className='text-lg text-gray-500 leading-relaxed'>
-                            Subtitle goes here
-                        </div>
+                        {website.description && (
+                            <div className='text-lg text-gray-500 leading-relaxed'>
+                                {website.description}
+                            </div>
+                        )}
                     </header>
                 </MiniWrapper>
                 {website.thumbnail && (
@@ -56,6 +41,8 @@ const SingleWebsite: React.FC<Props> = ({ id }) => {
                             fill={true}
                             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                             priority
+                            placeholder='blur'
+                            blurDataURL={website.blurData ?? undefined}
                         />
                     </figure>
                 )}

@@ -1,10 +1,7 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
+import { useTransition } from 'react'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
-import { revalidatePath, revalidateTag } from 'next/cache'
-import { mutate } from 'swr'
-import { useRouter } from 'next/navigation'
 import { toggleSave } from '@/client/queries'
 
 type Props = {
@@ -30,11 +27,12 @@ const variants = {
 }
 
 const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
-    const router = useRouter()
     const [isPending, startTransition] = useTransition()
 
     const handleSave = async () => {
         startTransition(async () => {
+            console.log('clicckato')
+
             if (!website_id) return
 
             // if (!user_id) {

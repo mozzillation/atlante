@@ -1,7 +1,5 @@
 import { Grid, Wrapper } from '../layout'
 import { WebsiteCard } from '../cards'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getAllWebsitesQuery } from '@/client/queries'
 
 const AllWebsites: React.FC = async () => {
@@ -10,7 +8,7 @@ const AllWebsites: React.FC = async () => {
     return (
         <Wrapper>
             <Grid>
-                {websites?.map((website, index) => <WebsiteCard {...website} key={website.id} />)}
+                {websites?.map((website, index) => <WebsiteCard {...website} key={index} />)}
             </Grid>
         </Wrapper>
     )

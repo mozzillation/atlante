@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Wrapper from '../wrapper'
 import Button from './button'
 import SignInButton from './sign-in-button'
@@ -18,6 +18,7 @@ const Header: React.FC<Props> = () => {
                     <nav className='flex justify-between content-center items-center w-max gap-2'>
                         <Button href='/directory'>Directory</Button>
                         {session.status === 'unauthenticated' && <SignInButton />}
+                        <button onClick={() => signOut()}>Sign Out</button>
                         <SubmitButton href='/submit' />
                     </nav>
                 </div>

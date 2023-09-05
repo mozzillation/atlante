@@ -396,46 +396,47 @@ model spatial_ref_sys {
   proj4text String? @db.VarChar(2048)
 }
 
-model style {
-  id         Int      @id @default(autoincrement())
-  name       String   @unique(map: "style_name_unique") @db.VarChar(255)
-  website_id String?  @db.Uuid
-  slug       String   @unique(map: "style_slug_unique") @db.VarChar(255)
-  website    website? @relation(fields: [website_id], references: [id], onUpdate: NoAction, map: "style_website_id_foreign")
-}
-
-model type {
-  id         String   @id @db.Uuid
-  name       String   @unique(map: "type_name_unique") @db.VarChar(255)
-  website_id String?  @db.Uuid
-  slug       String   @unique(map: "type_slug_unique") @db.VarChar(255)
-  website    website? @relation(fields: [website_id], references: [id], onUpdate: NoAction, map: "type_website_id_foreign")
-}
-
 model website {
-  id                                                  String          @id @db.Uuid
-  status                                              String          @default("draft") @db.VarChar(255)
-  user_created                                        String?         @db.Uuid
-  date_created                                        DateTime?       @db.Timestamptz(6)
-  user_updated                                        String?         @db.Uuid
-  date_updated                                        DateTime?       @db.Timestamptz(6)
-  name                                                String          @db.VarChar(255)
-  url                                                 String          @db.VarChar(255)
-  thumbnail                                           String?         @db.Uuid
+  id                                                  String             @id @db.Uuid
+  status                                              String             @default("draft") @db.VarChar(255)
+  user_created                                        String?            @db.Uuid
+  date_created                                        DateTime?          @db.Timestamptz(6)
+  user_updated                                        String?            @db.Uuid
+  date_updated                                        DateTime?          @db.Timestamptz(6)
+  name                                                String             @db.VarChar(255)
+  url                                                 String             @unique(map: "website_url_unique") @db.VarChar(255)
+  thumbnail                                           String?            @db.Uuid
   description                                         String?
+  blurData                                            String?            @db.VarChar(255)
   save                                                save[]
-  style                                               style[]
-  type                                                type[]
-  directus_files                                      directus_files? @relation(fields: [thumbnail], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "website_thumbnail_foreign")
-  directus_users_website_user_createdTodirectus_users directus_users? @relation("website_user_createdTodirectus_users", fields: [user_created], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "website_user_created_foreign")
-  directus_users_website_user_updatedTodirectus_users directus_users? @relation("website_user_updatedTodirectus_users", fields: [user_updated], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "website_user_updated_foreign")
+  directus_files                                      directus_files?    @relation(fields: [thumbnail], references: [id], onUpdate: NoAction, map: "website_thumbnail_foreign")
+  directus_users_website_user_createdTodirectus_users directus_users?    @relation("website_user_createdTodirectus_users", fields: [user_created], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "website_user_created_foreign")
+  directus_users_website_user_updatedTodirectus_users directus_users?    @relation("website_user_updatedTodirectus_users", fields: [user_updated], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "website_user_updated_foreign")
+  website_category                                    website_category[]
 }
 
 model save {
   id             Int            @id @default(autoincrement())
   website_id     String         @db.Uuid
   user_id        String         @db.Uuid
-  date_created   DateTime       @db.Timestamptz(6)
-  directus_users directus_users @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "save_user_id_foreign")
-  website        website        @relation(fields: [website_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "save_website_id_foreign")
+  date_created   DateTime       @db.Timestamp(6)
+  directus_users directus_users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "save_user_id_foreign")
+  website        website        @relation(fields: [website_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "save_website_id_foreign")
+}
+
+model category {
+  id               String             @id @db.Uuid
+  collection       String             @db.VarChar(255)
+  name             String             @db.VarChar(255)
+  slug             String             @unique(map: "category_slug_unique") @db.VarChar(255)
+  description      String?
+  website_category website_category[]
+}
+
+model website_category {
+  id          Int       @id @default(autoincrement())
+  website_id  String?   @db.Uuid
+  category_id String?   @db.Uuid
+  category    category? @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "website_category_category_id_foreign")
+  website     website?  @relation(fields: [website_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "website_category_website_id_foreign")
 }

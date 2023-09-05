@@ -48,15 +48,12 @@ const WebsiteCard: React.FC<Props> = ({
     thumbnail,
     url,
     date_created,
-    ...props
+    blurData,
 }) => {
     const [isHovered, setHover] = useState<boolean>(false)
 
     return (
-        <article
-            id='website'
-            className='bg-white rounded-md overflow-hidden tracking-wide border-2 border-gray-50'
-        >
+        <article className='bg-white rounded-md overflow-hidden tracking-wide border-2 border-gray-50'>
             <header className='p-3 flex flex-row justify-between'>
                 <Link href={`/w/${id}`}>
                     <div className='text-xs font-semibold hover:text-gray-500 transition-colors'>
@@ -77,6 +74,9 @@ const WebsiteCard: React.FC<Props> = ({
                                 src={imageUrl(thumbnail, 'thumbnail')}
                                 fill={true}
                                 alt={`Screenshot of ${url}`}
+                                placeholder='blur'
+                                blurDataURL={blurData ?? undefined}
+                                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                             />
                         )}
                         <AnimatePresence>

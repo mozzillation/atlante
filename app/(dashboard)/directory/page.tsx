@@ -1,6 +1,7 @@
+import { generateCategoriesSlugs } from '@/client/queries'
 import { CategoryList } from '@/components/organisms'
 
-const DirectoryPage = () => {
+const DirectoryPage = async () => {
     return (
         <>
             <CategoryList />

@@ -1,27 +1,31 @@
-'use client'
-
-import { Categories } from '@/types'
-import { fetcher } from '@/utils/fetcher'
-import useSWR from 'swr'
 import { MiniWrapper, Wrapper } from '../layout'
 import Link from 'next/link'
+import { getAllCategoriesQuery } from '@/client/queries'
 
-const CategoryList: React.FC = () => {
-    const { data: categories, isLoading, error } = useSWR<Categories>('/api/category/all', fetcher)
-
-    if (error) return <>error</>
-    if (isLoading) return <>loading...</>
+const CategoryList: React.FC = async () => {
+    const categories = await getAllCategoriesQuery()
 
     return (
         <Wrapper>
             <CategoryGroup name='Type'>
-                {categories?.types.map((type, index) => (
-                    <CategoryItem type='type' name={type.name} slug={type.slug} key={index} />
+                {categories?.types.map((category, index) => (
+                    <CategoryItem
+                        type={category.collection}
+                        name={category.name}
+                        slug={category.slug}
+                        key={index}
+                    />
                 ))}
             </CategoryGroup>
             <CategoryGroup name='Style'>
-                {categories?.styles.map((style, index) => (
-                    <CategoryItem type='style' name={style.name} slug={style.slug} key={index} />
+                {categories?.styles.map((category, index) => (
+                    <CategoryItem
+                        type={category.collection}
+                        name={category.name}
+                        slug={category.slug}
+                        key={index}
+                        // _count={style.website_style.length}
+                    />
                 ))}
             </CategoryGroup>
         </Wrapper>
@@ -52,10 +56,12 @@ type CategoryItemProps = {
 
 const CategoryItem: React.FC<CategoryItemProps> = ({ name, slug, type }) => {
     return (
-        <Link href={`/${type}/slug`}>
+        <Link href={`/directory/${type}/${slug}`}>
             <li className='list-none py-2 hover:bg-gray-100 rounded-lg transition-colors'>
                 <MiniWrapper>
-                    <div className='text-sm tracking-wider'>{name}</div>
+                    <div className='flex flex-row justify-between'>
+                        <div className='text-sm tracking-wider'>{name}</div>
+                    </div>
                 </MiniWrapper>
             </li>
         </Link>

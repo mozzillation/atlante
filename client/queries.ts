@@ -3,10 +3,43 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from './prisma'
 import { SaveWithWebsite, WebsiteWithSaves } from '@/types'
-import { directus_users, save, style, type, website } from '@prisma/client'
+import { directus_users } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
 import { notFound, redirect } from 'next/navigation'
+
+import { getPlaiceholder } from 'plaiceholder'
+import { imageUrl } from '@/utils/image'
+
+type SetBlurUrlProps = {
+    website_id: string
+    asset_id: string
+}
+
+export const setBlurUrl = async ({ website_id, asset_id }: SetBlurUrlProps) => {
+    if (!asset_id) throw new Error(`Failed to fetch ${asset_id}: no asset id provided`)
+
+    try {
+        const res = await fetch(imageUrl(asset_id, 'thumbnail'))
+
+        if (!res.ok) throw new Error(`Failed to fetch ${asset_id}: ${res.status}`)
+
+        const buffer = await res.arrayBuffer()
+
+        const { base64 } = await getPlaiceholder(Buffer.from(buffer))
+
+        return await prisma.website.update({
+            where: {
+                id: website_id,
+            },
+            data: {
+                blurData: base64,
+            },
+        })
+    } catch (err) {
+        err
+    }
+}
 
 export const getAllWebsitesQuery = async (): Promise<WebsiteWithSaves[]> => {
     const session = await getServerSession(authOptions)
@@ -85,10 +118,9 @@ type GetWebsiteQueryProps = {
     id: string
 }
 
-export const getWebsiteQuery = async ({
-    user_id,
-    id,
-}: GetWebsiteQueryProps): Promise<WebsiteWithSaves> => {
+export const getWebsiteQuery = async (id: string): Promise<WebsiteWithSaves> => {
+    const session = await getServerSession(authOptions)
+
     return await prisma.website
         .findUniqueOrThrow({
             where: {
@@ -96,14 +128,20 @@ export const getWebsiteQuery = async ({
             },
             include: {
                 save: true,
-                style: true,
-                type: true,
+                website_category: true,
             },
         })
         .then((website) => {
-            return {
-                ...website,
-                isSaved: website.save.some((i) => i.user_id === user_id),
+            if (session?.user.id) {
+                return {
+                    ...website,
+                    isSaved: website.save.some((i) => i.user_id === session?.user.id),
+                }
+            } else {
+                return {
+                    ...website,
+                    isSaved: false,
+                }
             }
         })
 }
@@ -146,27 +184,106 @@ export const toggleSave = async ({ website_id, isSaved }: ToggleSaveFunction) =>
     }
 
     revalidatePath('/')
-    revalidatePath('/me')
+    // revalidatePath('/me')
+    // revalidatePath('/directory')
 }
 
 export const getAllCategoriesQuery = async () => {
-    const types = await prisma.type.findMany({
-        orderBy: [
-            {
+    return await prisma.category
+        .findMany({
+            where: {
+                slug: {
+                    not: undefined,
+                },
+            },
+            orderBy: {
                 name: 'asc',
             },
-        ],
-    })
-    const styles = await prisma.style.findMany({
-        orderBy: [
-            {
-                name: 'asc',
-            },
-        ],
-    })
+        })
+        .then((res) => {
+            const types = res.filter((category) => category.collection === 'type')
+            const styles = res.filter((category) => category.collection === 'style')
 
-    return {
-        types,
-        styles,
-    }
+            return {
+                types,
+                styles,
+            }
+        })
+}
+
+type GetCategoryQueryProps = {
+    collection: 'style' | 'type'
+    slug: string
+}
+
+export const getCategoryQuery = async ({ collection, slug }: GetCategoryQueryProps) => {
+    return await prisma.category.findUnique({
+        where: {
+            slug,
+            collection,
+        },
+        include: {
+            _count: {
+                select: {
+                    website_category: true,
+                },
+            },
+        },
+    })
+}
+
+type GetWebsitesByQueryProps = {
+    collection: 'style' | 'type'
+    slug: string
+}
+
+export const getWebsitesByCategoryQuery = async ({ collection, slug }: GetWebsitesByQueryProps) => {
+    const session = await getServerSession(authOptions)
+
+    return await prisma.website
+        .findMany({
+            where: {
+                website_category: {
+                    some: {
+                        category: {
+                            collection,
+                            slug,
+                        },
+                    },
+                },
+            },
+            include: {
+                save: true,
+            },
+        })
+        .then((res) => {
+            if (session?.user.id) {
+                const websites = res.map((website) => {
+                    return {
+                        ...website,
+                        isSaved: website.save.some((i) => i.user_id === session.user.id),
+                    }
+                })
+
+                return websites
+            } else {
+                const websites = res.map((website) => {
+                    return {
+                        ...website,
+                        isSaved: false,
+                    }
+                })
+                return websites
+            }
+        })
+}
+
+export const generateCategoriesSlugs = async () => {
+    return await prisma.category.findMany({
+        where: {
+            slug: {
+                not: undefined,
+            },
+        },
+    })
 }

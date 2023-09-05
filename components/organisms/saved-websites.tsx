@@ -15,9 +15,7 @@ const SavedWebsites: React.FC = async () => {
     return (
         <Wrapper>
             <Grid>
-                {saves?.map((save, index) => (
-                    <WebsiteCard {...save.website} key={save.website_id} />
-                ))}
+                {saves?.map((save, index) => <WebsiteCard {...save.website} key={index} />)}
             </Grid>
         </Wrapper>
     )
