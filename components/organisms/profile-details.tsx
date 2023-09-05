@@ -6,6 +6,8 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { notFound } from 'next/navigation'
 import { SignOutButton } from '../atoms'
 import { SavedWebsites } from '.'
+import { Suspense } from 'react'
+import WebsitesSkeleton from '../skeletons/websites'
 
 const getUserDetails = async () => {
     const session = await getServerSession(authOptions)
@@ -37,7 +39,6 @@ const ProfileDetails: React.FC = async () => {
                     <div className='shrink-0'></div>
                 </div>
             </MiniWrapper>
-            <SavedWebsites />
         </section>
     )
 }
