@@ -9,21 +9,14 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getSavedWebsitesQuery } from '@/client/queries'
 import { notFound } from 'next/navigation'
 
-const getSavedWebsite = async () => {
-    const session = await getServerSession(authOptions)
-    if (!session || !session.user) notFound
-
-    return await getSavedWebsitesQuery(session?.user.id)
-}
-
 const SavedWebsites: React.FC = async () => {
-    const saves = await getSavedWebsite()
+    const saves = await getSavedWebsitesQuery()
 
     return (
         <Wrapper>
             <Grid>
                 {saves?.map((save, index) => (
-                    <WebsiteCard {...save.website} key={save.website_id} user_id={save.user_id} />
+                    <WebsiteCard {...save.website} key={save.website_id} />
                 ))}
             </Grid>
         </Wrapper>

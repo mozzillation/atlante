@@ -1,15 +1,21 @@
 'use server'
 
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from './prisma'
 import { SaveWithWebsite, WebsiteWithSaves } from '@/types'
 import { directus_users, save, style, type, website } from '@prisma/client'
+import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
+import { notFound, redirect } from 'next/navigation'
 
-export const getAllWebsitesQuery = async (
-    user_id: string | undefined,
-): Promise<WebsiteWithSaves[]> => {
+export const getAllWebsitesQuery = async (): Promise<WebsiteWithSaves[]> => {
+    const session = await getServerSession(authOptions)
+
     return await prisma.website
         .findMany({
+            where: {
+                status: 'published',
+            },
             include: {
                 save: true,
             },
@@ -20,11 +26,11 @@ export const getAllWebsitesQuery = async (
             ],
         })
         .then((res) => {
-            if (user_id) {
+            if (session?.user.id) {
                 const websites = res.map((website) => {
                     return {
                         ...website,
-                        isSaved: website.save.some((i) => i.user_id === user_id),
+                        isSaved: website.save.some((i) => i.user_id === session.user.id),
                     }
                 })
 
@@ -41,15 +47,15 @@ export const getAllWebsitesQuery = async (
         })
 }
 
-export const getSavedWebsitesQuery = async (
-    user_id: string | undefined,
-): Promise<SaveWithWebsite[]> => {
-    if (!user_id) throw 'Not logged'
+export const getSavedWebsitesQuery = async (): Promise<SaveWithWebsite[]> => {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user.id) notFound()
 
     return await prisma.save
         .findMany({
             where: {
-                user_id,
+                user_id: session.user.id,
                 website: {
                     status: 'published',
                 },
@@ -112,25 +118,28 @@ export const getProfileQuery = async (user_id: string): Promise<directus_users> 
 
 type ToggleSaveFunction = {
     website_id: string
-    user_id: string
     isSaved: boolean
 }
 
-export const toggleSave = async ({ website_id, user_id, isSaved }: ToggleSaveFunction) => {
-    if (!website_id || !user_id) throw 'Internal Error'
+export const toggleSave = async ({ website_id, isSaved }: ToggleSaveFunction) => {
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user.id) redirect('/sign-in')
+
+    if (!website_id) throw 'Internal Error'
 
     if (isSaved) {
         const action = await prisma.save.deleteMany({
             where: {
                 website_id,
-                user_id,
+                user_id: session.user.id,
             },
         })
     } else {
         const action = await prisma.save.create({
             data: {
                 website_id,
-                user_id,
+                user_id: session.user.id,
                 date_created: new Date(),
             },
         })

@@ -9,7 +9,6 @@ import { toggleSave } from '@/client/queries'
 
 type Props = {
     isSaved: boolean
-    user_id: string | undefined
     website_id: string
 }
 
@@ -30,7 +29,7 @@ const variants = {
     },
 }
 
-const SaveButton: React.FC<Props> = ({ user_id, website_id, isSaved }) => {
+const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
 
@@ -38,14 +37,13 @@ const SaveButton: React.FC<Props> = ({ user_id, website_id, isSaved }) => {
         startTransition(async () => {
             if (!website_id) return
 
-            if (!user_id) {
-                router.push('/sign-in')
-                return
-            }
+            // if (!user_id) {
+            //     router.push('/sign-in')
+            //     return
+            // }
 
             await toggleSave({
                 website_id,
-                user_id,
                 isSaved,
             })
         })

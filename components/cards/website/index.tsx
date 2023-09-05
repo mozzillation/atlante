@@ -39,12 +39,10 @@ const buttonVariants = {
 
 type Props = website & {
     isSaved: boolean
-    user_id: string | undefined
 }
 
 const WebsiteCard: React.FC<Props> = ({
     id,
-    user_id,
     name,
     isSaved,
     thumbnail,
@@ -105,7 +103,7 @@ const WebsiteCard: React.FC<Props> = ({
             </motion.div>
 
             <footer className='p-3 flex flex-row justify-between content-center items-center'>
-                <SaveButton isSaved={isSaved} user_id={user_id} website_id={id} key={id} />
+                <SaveButton isSaved={isSaved} website_id={id} key={id} />
             </footer>
         </article>
     )

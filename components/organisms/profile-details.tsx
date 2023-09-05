@@ -1,46 +1,26 @@
-'use client'
-
-import { AvatarFallback } from '@radix-ui/react-avatar'
 import { MiniWrapper } from '../layout'
-import { Avatar, AvatarImage } from '../ui/avatar'
-import { directus_users } from '@prisma/client'
-import { imageUrl } from '@/utils/image'
-import useSWR from 'swr'
-import { fetcher } from '@/utils/fetcher'
+import ProfileAvatar from '../atoms/profile-avatar'
+import { getProfileQuery } from '@/client/queries'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { notFound } from 'next/navigation'
 
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { signOut } from 'next-auth/react'
-import { DotsThreeVertical } from '@phosphor-icons/react'
+const getUserDetails = async () => {
+    const session = await getServerSession(authOptions)
+    if (!session?.user) notFound()
 
-type Props = Partial<directus_users>
+    return await getProfileQuery(session?.user.id)
+}
 
-const ProfileDetails: React.FC<Props> = () => {
-    const { data: user, isLoading, error } = useSWR('/api/profile', fetcher)
-
-    if (error) return <>Error</>
-    if (isLoading) return <>is loading</>
+const ProfileDetails: React.FC = async () => {
+    const user = await getUserDetails()
 
     return (
         <div>
             <MiniWrapper>
                 <div className='flex gap-4 flex-row items-center content-center'>
                     <div>
-                        <Avatar className='w-20 h-20 flex items-center content-center justify-center border-2 border-white shadow-md rounded-lg bg-gray-100 text-gray-300'>
-                            <AvatarImage src={imageUrl(user.avatar, 'thumbnail')} />
-
-                            <AvatarFallback>
-                                <div className='w-max h-max text-3xl'>
-                                    {user.first_name.slice(0, 1)}
-                                </div>
-                            </AvatarFallback>
-                        </Avatar>
+                        <ProfileAvatar avatar={user.avatar} first_name={user.first_name} />
                     </div>
 
                     <div className='shrink w-full'>
@@ -49,25 +29,7 @@ const ProfileDetails: React.FC<Props> = () => {
                         </h2>
                     </div>
 
-                    <div className='shrink-0'>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <div className='p-2 rounded-lg leading-6  transition-colors hover:bg-gray-100 active:bg-gray-200'>
-                                    <DotsThreeVertical size={24} />
-                                </div>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem>Edit Profile</DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                    className='text-red-400 focus:text-red-400 focus:bg-red-100'
-                                    onClick={() => signOut()}
-                                >
-                                    Sign Out
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                    <div className='shrink-0'></div>
                 </div>
             </MiniWrapper>
         </div>

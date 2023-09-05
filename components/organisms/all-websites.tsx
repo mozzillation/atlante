@@ -4,20 +4,13 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getAllWebsitesQuery } from '@/client/queries'
 
-const getAllWebsite = async (user_id: string | undefined) => {
-    return await getAllWebsitesQuery(user_id)
-}
-
 const AllWebsites: React.FC = async () => {
-    const session = await getServerSession(authOptions)
-    const websites = await getAllWebsite(session?.user.id)
+    const websites = await getAllWebsitesQuery()
 
     return (
         <Wrapper>
             <Grid>
-                {websites?.map((website, index) => (
-                    <WebsiteCard {...website} key={website.id} user_id={session?.user.id} />
-                ))}
+                {websites?.map((website, index) => <WebsiteCard {...website} key={website.id} />)}
             </Grid>
         </Wrapper>
     )

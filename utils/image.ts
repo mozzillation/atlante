@@ -1,4 +1,6 @@
-export const imageUrl = (path: string, key: string): string => {
+export const imageUrl = (path: string | null, key: string): string => {
+    if (!path) return 'null'
+
     return `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${path}?key=${key}`
 }
 
