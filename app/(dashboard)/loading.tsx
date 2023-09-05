@@ -1,5 +1,7 @@
+import GenericSkeleton from '@/components/skeletons/generic'
+
 const Loading = () => {
-    return <div>loading...</div>
+    return <GenericSkeleton />
 }
 
 export default Loading

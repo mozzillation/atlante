@@ -11,7 +11,11 @@ type Props = {
 const WebsitesSkeleton: React.FC<Props> = ({ isSavedSection = false }) => {
     return (
         <Wrapper>
-            {isSavedSection && <Skeleton className='w-20 h-4' />}
+            {isSavedSection && (
+                <div className='pt-4'>
+                    <Skeleton className='w-20 h-4' />
+                </div>
+            )}
             <Grid>
                 {[...Array(20)].map((_, index) => (
                     <WebsiteCardSkeleton key={index} />

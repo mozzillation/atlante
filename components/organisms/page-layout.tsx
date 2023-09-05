@@ -7,11 +7,11 @@ type Props = {
 
 const PageLayout: React.FC<Props> = ({ children }) => {
     return (
-        <div className='flex flex-row float-left w-full'>
+        <div className='flex flex-row float-left w-full min-h-screen'>
             <Sidebar />
-            <div className='w-full sticky top-0 min-h-[300vh] bg-gray-50'>
+            <div className='w-full sticky top-0 bg-gray-50 flex flex-col '>
                 <Header />
-                <main>{children}</main>
+                <main className='relative h-full shrink'>{children}</main>
             </div>
         </div>
     )
