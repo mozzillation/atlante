@@ -1,10 +1,8 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Lexend } from 'next/font/google'
-import { SessionContext } from '@/components/contexts'
-import { PageLayout } from '@/components/organisms'
 
-const manrope = Lexend({ subsets: ['latin'] })
+const lexend = Lexend({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
     title: 'Atlante Gallery',
@@ -14,7 +12,7 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <html lang='en'>
-            <body className={manrope.className}>{children}</body>
+            <body className={lexend.className}>{children}</body>
         </html>
     )
 }

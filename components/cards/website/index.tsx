@@ -53,24 +53,24 @@ const WebsiteCard: React.FC<Props> = ({
     const [isHovered, setHover] = useState<boolean>(false)
 
     return (
-        <article className='bg-white rounded-md overflow-hidden tracking-wide shadow-sm'>
+        <article className='bg-card rounded-md overflow-hidden tracking-wide border'>
             <header className='p-3 flex flex-row justify-between gap-1'>
                 <Link href={`/w/${id}`}>
-                    <div className='text-xs font-semibold hover:text-gray-500 transition-colors truncate w-full overflow-hidden'>
+                    <div className='text-primary text-xs font-semibold hover:text-accent transition-colors truncate w-full overflow-hidden'>
                         {name}
                     </div>
                 </Link>
-                <time className='text-xs text-gray-400 truncate overflow-hidden '>
+                <time className='text-xs text-tertiary truncate overflow-hidden '>
                     {dayjs(date_created).fromNow()}
                 </time>
             </header>
             <motion.div
-                className='relative'
+                className='relative px-3'
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
             >
                 <a href={`${url}/?ref=atlante.gallery`} target='_blank' rel='noreferrer noopener'>
-                    <motion.figure className='aspect-video bg-gray-50 relative border-t-2 border-b-2 border-gray-100'>
+                    <motion.figure className='aspect-video relative border bg-border rounded overflow-hidden shadow-lg'>
                         {thumbnail && (
                             <Image
                                 src={imageUrl(thumbnail, 'thumbnail')}
@@ -84,13 +84,13 @@ const WebsiteCard: React.FC<Props> = ({
                         <AnimatePresence>
                             {isHovered && (
                                 <motion.div
-                                    className='absolute top-0 left-0 right-0 bottom-0 flex justify-center content-center items-center bg-gray-950/50'
+                                    className='absolute top-0 left-0 right-0 bottom-0 flex justify-center content-center items-center bg-accent'
                                     variants={hoverVariants}
                                     initial='initial'
                                     animate='animate'
                                 >
                                     <motion.div
-                                        className='p-2 bg-white text-gray-950 rounded-full'
+                                        className='p-2 bg-background rounded-full'
                                         variants={buttonVariants}
                                         initial='initial'
                                         animate='animate'
