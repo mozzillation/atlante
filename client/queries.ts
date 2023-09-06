@@ -9,7 +9,8 @@ import { revalidatePath } from 'next/cache'
 import { notFound, redirect } from 'next/navigation'
 
 import { getPlaiceholder } from 'plaiceholder'
-import { imageUrl } from '@/utils/image'
+import { imageUrl } from '@/lib/image'
+import { randomUUID } from 'crypto'
 
 type SetBlurUrlProps = {
     website_id: string
@@ -298,4 +299,31 @@ export const generateCategoriesSlugs = async () => {
             },
         },
     })
+}
+
+export const addSubmission = async (url: string) => {
+    const action = await prisma.submission.create({
+        data: {
+            id: randomUUID(),
+            url,
+            date_created: new Date().toISOString(),
+        },
+    })
+
+    if (action.id)
+        await fetch(
+            'https://directus.mzz.design/flows/trigger/e767e385-7afb-4dd5-902c-9dd606eca2b4',
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${process.env.DIRECTUS_ADMIN}`,
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: action.id,
+                }),
+            },
+        )
+
+    return action
 }

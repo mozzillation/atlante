@@ -1,6 +1,6 @@
 'use client'
 
-import { imageUrl } from '@/utils/image'
+import { imageUrl } from '@/lib/image'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
 type Props = {

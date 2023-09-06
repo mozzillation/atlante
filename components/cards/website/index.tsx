@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import { website } from '@prisma/client'
-import { imageUrl } from '@/utils/image'
+import { imageUrl } from '@/lib/image'
 
 import SaveButton from './save-button'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -53,7 +53,7 @@ const WebsiteCard: React.FC<Props> = ({
     const [isHovered, setHover] = useState<boolean>(false)
 
     return (
-        <article className='bg-white rounded-md overflow-hidden tracking-wide shadow-lg'>
+        <article className='bg-white rounded-md overflow-hidden tracking-wide shadow-sm'>
             <header className='p-3 flex flex-row justify-between gap-1'>
                 <Link href={`/w/${id}`}>
                     <div className='text-xs font-semibold hover:text-gray-500 transition-colors truncate w-full overflow-hidden'>

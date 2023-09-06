@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { imageUrl } from '@/utils/image'
+import { imageUrl } from '@/lib/image'
 import { directus_users } from '@prisma/client'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'

@@ -2,9 +2,8 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { SheetClose } from '@/components/ui/sheet'
-import { imageUrl } from '@/utils/image'
+import { imageUrl } from '@/lib/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 type Props = {
     avatar: string | null

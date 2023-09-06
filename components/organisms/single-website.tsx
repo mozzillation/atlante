@@ -1,5 +1,5 @@
 import { MiniWrapper, Wrapper } from '../layout'
-import { imageUrl } from '@/utils/image'
+import { imageUrl } from '@/lib/image'
 import Image from 'next/image'
 import dayjs from 'dayjs'
 
@@ -28,21 +28,37 @@ const SingleWebsite: React.FC<Props> = async ({ id }) => {
                             {website.name}
                         </h1>
 
-                        <div className='text-lg text-gray-500 leading-relaxed'>{website.url}</div>
+                        <div className=''>
+                            <a
+                                href={`${website.url}/?ref=atlante.gallery`}
+                                target='_blank'
+                                rel='noreferrer noopener'
+                                className='border-b border-gray-200 text-lg text-gray-500 leading-relaxed transition-colors hover:border-gray-300 '
+                            >
+                                {website.url}
+                            </a>
+                        </div>
                     </header>
                 </MiniWrapper>
                 <Wrapper>
                     {website.thumbnail && (
-                        <figure className='w-full max-w-6xl bg-gray-100 aspect-video rounded-lg relative shadow-lg overflow-hidden m-auto'>
-                            <Image
-                                src={imageUrl(website.thumbnail, 'large')}
-                                alt={`Screenshot of ${website.url}`}
-                                fill={true}
-                                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                                priority
-                                placeholder='blur'
-                                blurDataURL={website.blurData ?? undefined}
-                            />
+                        <figure className='w-full max-w-6xl bg-gray-100 aspect-video rounded-lg relative shadow-lg overflow-hidden m-auto hover:-translate-y-1 transition-transform'>
+                            <a
+                                href={`${website.url}/?ref=atlante.gallery`}
+                                target='_blank'
+                                rel='noreferrer noopener'
+                                className='hover:opacity-90 transition-opacity'
+                            >
+                                <Image
+                                    src={imageUrl(website.thumbnail, 'large')}
+                                    alt={`Screenshot of ${website.url}`}
+                                    fill={true}
+                                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                                    priority
+                                    placeholder='blur'
+                                    blurDataURL={website.blurData ?? undefined}
+                                />
+                            </a>
                         </figure>
                     )}
                 </Wrapper>
