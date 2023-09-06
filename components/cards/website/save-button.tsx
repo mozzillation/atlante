@@ -49,12 +49,11 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
                 transition={transition}
                 className={`${
                     isSaved
-                        ? `bg-green-300 text-green-700 hover:bg-green-400 active:bg-green-500`
-                        : `bg-gray-200 text-black hover:bg-gray-300 active:bg-gray-400`
-                } w-fit p-2 rounded-md text-xs transition-colors tracking-wider select-none ${
-                    isPending ? `opacity-50 cursor-wait` : `cursor-pointer`
+                        ? `bg-success text-success-foreground hover:bg-success/80 active:bg-success/70`
+                        : `bg-muted text-muted-foreground hover:bg-muted/80 active:bg-muted/70`
+                } w-fit p-2 rounded-md text-xs transition-all tracking-wider select-none ${
+                    isPending ? `animate-pulse cursor-wait pointer-events-none` : `cursor-pointer`
                 }`}
-                whileTap={{ scale: 0.95, transition: { duration: 0.1 } }}
             >
                 <LayoutGroup>
                     {isSaved && (

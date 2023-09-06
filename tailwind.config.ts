@@ -16,54 +16,55 @@ module.exports = {
             current: 'currentColor',
             black: colors.black,
             white: colors.white,
-            gray: colors.slate,
+            gray: colors.stone,
             green: colors.emerald,
             purple: colors.violet,
             yellow: colors.amber,
             pink: colors.fuchsia,
             red: colors.red,
         },
-        container: {
-            center: true,
-            padding: '2rem',
-            screens: {
-                '2xl': '1400px',
-            },
-        },
+
         extend: {
             colors: {
-                border: 'hsl(var(--border))',
-                input: 'hsl(var(--input))',
-                ring: 'hsl(var(--ring))',
-                background: 'hsl(var(--background))',
-                foreground: 'hsl(var(--foreground))',
+                border: 'rgb(var(--border))',
+                input: 'rgb(var(--input))',
+                ring: 'rgb(var(--ring))',
+                background: 'rgb(var(--background))',
+                foreground: 'rgb(var(--foreground))',
                 primary: {
-                    DEFAULT: 'hsl(var(--primary))',
-                    foreground: 'hsl(var(--primary-foreground))',
+                    DEFAULT: 'rgb(var(--primary))',
+                    foreground: 'rgb(var(--primary-foreground))',
                 },
                 secondary: {
-                    DEFAULT: 'hsl(var(--secondary))',
-                    foreground: 'hsl(var(--secondary-foreground))',
+                    DEFAULT: 'rgb(var(--secondary))',
+                    foreground: 'rgb(var(--secondary-foreground))',
+                },
+                tertiary: {
+                    DEFAULT: 'rgb(var(--tertiary))',
+                    foreground: 'rgb(var(--tertiary-foreground))',
                 },
                 destructive: {
-                    DEFAULT: 'hsl(var(--destructive))',
-                    foreground: 'hsl(var(--destructive-foreground))',
+                    DEFAULT: 'rgb(var(--destructive))',
+                    foreground: 'rgb(var(--destructive-foreground))',
                 },
                 muted: {
-                    DEFAULT: 'hsl(var(--muted))',
-                    foreground: 'hsl(var(--muted-foreground))',
+                    DEFAULT: 'rgb(var(--muted))',
+                    foreground: 'rgb(var(--muted-foreground))',
                 },
                 accent: {
-                    DEFAULT: 'hsl(var(--accent))',
-                    foreground: 'hsl(var(--accent-foreground))',
+                    DEFAULT: 'rgb(var(--accent))',
+                    foreground: 'rgb(var(--accent-foreground))',
                 },
                 popover: {
-                    DEFAULT: 'hsl(var(--popover))',
-                    foreground: 'hsl(var(--popover-foreground))',
+                    DEFAULT: 'rgb(var(--popover))',
+                    foreground: 'rgb(var(--popover-foreground))',
                 },
                 card: {
-                    DEFAULT: 'hsl(var(--card))',
-                    foreground: 'hsl(var(--card-foreground))',
+                    DEFAULT: 'rgb(var(--card))',
+                },
+                success: {
+                    DEFAULT: 'rgb(var(--success))',
+                    foreground: 'rgb(var(--success-foreground))',
                 },
             },
             borderRadius: {
@@ -81,6 +82,7 @@ module.exports = {
                     to: { height: 0 },
                 },
             },
+
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
                 'accordion-up': 'accordion-up 0.2s ease-out',

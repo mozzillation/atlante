@@ -5,7 +5,7 @@ type Props = {
 }
 
 const MiniWrapper: React.FC<Props> = ({ children }) => {
-    return <div className='px-2 md:px-4 m-auto w-full max-w-prose'>{children}</div>
+    return <div className='px-2 md:px-4 m-auto w-full max-w-lg'>{children}</div>
 }
 
 export default MiniWrapper

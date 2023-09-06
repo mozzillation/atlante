@@ -1,4 +1,4 @@
-import { category, save, website } from '@prisma/client'
+import { category, save, website, website_category } from '@prisma/client'
 
 export type WebsiteWithSaves = website & {
     isSaved: boolean
@@ -14,4 +14,14 @@ export type SaveWithWebsite = save & {
     website: website & {
         isSaved: boolean
     }
+}
+
+export type CategoryWithRelations = website_category & {
+    category: category
+}
+
+export type WebsiteWithSavesAndCategories = website & {
+    isSaved: boolean
+    save: save[]
+    website_category: CategoryWithRelations[]
 }

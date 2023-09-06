@@ -1,11 +1,7 @@
 import { SubmitForm } from '@/components/forms'
 
 const SubmitPage = async () => {
-    return (
-        <>
-            <SubmitForm />
-        </>
-    )
+    return <SubmitForm />
 }
 
 export default SubmitPage

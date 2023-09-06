@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { Url } from 'next/dist/shared/lib/router/router'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -11,14 +12,7 @@ type Props = {
 const SubmitButton: React.FC<Props> = ({ href }) => {
     const router = useRouter()
 
-    return (
-        <button
-            className={`p-2 rounded-lg leading-6 text-xs transition-colors tracking-wider bg-black text-white hover:bg-gray-950 active:bg-gray-900`}
-            onClick={() => router.push(href)}
-        >
-            Submit a Website
-        </button>
-    )
+    return <Button onClick={() => router.push(href)}>Submit a Website</Button>
 }
 
 export default SubmitButton

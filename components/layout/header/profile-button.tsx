@@ -15,16 +15,10 @@ const ProfileButton: React.FC<Props> = ({ avatar, first_name, last_name }) => {
     return (
         <SheetClose asChild>
             <Link href='/me' passHref>
-                <div className='flex flex-row gap-2 items-center content-center'>
-                    <Avatar className='w-12 h-12 rounded-lg shadow-md border-2 border-white'>
-                        {avatar && <AvatarImage src={imageUrl(avatar, 'avatar')} />}
-                        <AvatarFallback>{first_name?.slice(0, 1)}</AvatarFallback>
-                    </Avatar>
-
-                    <div className='shrink w-full text-md tracking-wider text-gray-500'>
-                        {first_name} {last_name}
-                    </div>
-                </div>
+                <Avatar className='w-12 h-12 rounded-full shadow-md border-2 border-white'>
+                    {avatar && <AvatarImage src={imageUrl(avatar, 'avatar')} />}
+                    <AvatarFallback>{first_name?.slice(0, 1)}</AvatarFallback>
+                </Avatar>
             </Link>
         </SheetClose>
     )

@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import ProfileButton from './profile-button'
-import HomeButton from './home-button'
+import HomeButton from '../../atoms/home-button'
 
 const Sidebar: React.FC<{}> = () => {
     const session = useSession()
@@ -10,7 +10,7 @@ const Sidebar: React.FC<{}> = () => {
     return (
         <aside
             id='sidebar'
-            className='sticky top-0 left-0 h-screen shrink-0 px-2 py-4 shadow-xl z-10 hidden md:flex justify-between items-start flex-col'
+            className='sticky top-0 left-0 h-screen shrink-0 px-2 py-4 shadow-xl z-10 hidden md:flex justify-between items-start flex-col bg-background'
         >
             <HomeButton />
             {session.data?.user && (

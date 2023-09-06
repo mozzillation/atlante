@@ -2,7 +2,7 @@
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from './prisma'
-import { SaveWithWebsite, WebsiteWithSaves } from '@/types'
+import { SaveWithWebsite, WebsiteWithSaves, WebsiteWithSavesAndCategories } from '@/types'
 import { directus_users } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
@@ -119,7 +119,7 @@ type GetWebsiteQueryProps = {
     id: string
 }
 
-export const getWebsiteQuery = async (id: string): Promise<WebsiteWithSaves> => {
+export const getWebsiteQuery = async (id: string): Promise<WebsiteWithSavesAndCategories> => {
     const session = await getServerSession(authOptions)
 
     return await prisma.website
@@ -129,7 +129,11 @@ export const getWebsiteQuery = async (id: string): Promise<WebsiteWithSaves> => 
             },
             include: {
                 save: true,
-                website_category: true,
+                website_category: {
+                    include: {
+                        category: true,
+                    },
+                },
             },
         })
         .then((website) => {
@@ -192,6 +196,13 @@ export const toggleSave = async ({ website_id, isSaved }: ToggleSaveFunction) =>
 export const getAllCategoriesQuery = async () => {
     return await prisma.category
         .findMany({
+            include: {
+                _count: {
+                    select: {
+                        website_category: true,
+                    },
+                },
+            },
             where: {
                 slug: {
                     not: undefined,
@@ -200,15 +211,10 @@ export const getAllCategoriesQuery = async () => {
             orderBy: {
                 name: 'asc',
             },
-            include: {
-                _count: {
-                    select: {
-                        website_category: true,
-                    },
-                },
-            },
         })
         .then((res) => {
+            console.log(res)
+
             const types = res.filter((category) => category.collection === 'type')
             const styles = res.filter((category) => category.collection === 'style')
 

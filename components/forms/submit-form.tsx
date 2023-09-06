@@ -53,19 +53,19 @@ const SubmitForm = () => {
     }
 
     return (
-        <div className='py-4'>
+        <div className='py-4 h-full'>
             <Wrapper>
                 <MiniWrapper>
-                    <header className='tracking-wider '>
-                        <h2 className='text-2xl  text-gray-950 leading-relaxed font-semibold pb-4'>
+                    <header className='tracking-wider'>
+                        <h2 className='text-2xl leading-relaxed font-medium pb-4'>
                             Submit a Website
                         </h2>
                     </header>
-                    <div className='bg-white p-4 shadow-sm rounded-lg'>
+                    <div className='bg-white p-4 border rounded-lg'>
                         <Form {...form}>
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
-                                className='space-y-8'
+                                className='space-y-4'
                                 onChange={onChange}
                             >
                                 <FormField
@@ -73,38 +73,36 @@ const SubmitForm = () => {
                                     name='url'
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className='tracking-wider'>
-                                                Website URL
-                                            </FormLabel>
+                                            <FormLabel>Website URL</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder='https://example.com'
                                                     {...field}
-                                                    className='p-4 h-auto text-xs tracking-widest bg-gray-100 border-none focus-visible:ring-gray-300'
                                                 />
                                             </FormControl>
-                                            <FormDescription className='text-xs text-gray-400 tracking-widest'>
+
+                                            <FormMessage className='text-xs tracking-widest' />
+                                            <FormDescription>
                                                 Please provide the website&apos;s domain only,
                                                 rather than a specific page.
                                             </FormDescription>
-                                            <FormMessage className='text-xs tracking-widest' />
                                         </FormItem>
                                     )}
                                 />
                                 <Button type='submit' disabled={isPending}>
                                     Submit
                                 </Button>
+                                {isSubmitted && (
+                                    <div className='mt-4 bg-success text-success-foreground p-4 rounded-lg text-xs tracking-widest'>
+                                        Website submitted. We&apos;ll review it as soon as possible.
+                                    </div>
+                                )}
+                                {isError && (
+                                    <div className='mt-4 bg-destructive text-destructive-foreground p-4 rounded-lg text-xs tracking-widest'>
+                                        Ops, something went wrong. Try later.
+                                    </div>
+                                )}
                             </form>
-                            {isSubmitted && (
-                                <div className='mt-4 bg-green-100 text-green-700 p-4 rounded-lg text-xs tracking-widest'>
-                                    Website submitted. We&apos;ll review it as soon as possible.
-                                </div>
-                            )}
-                            {isError && (
-                                <div className='mt-4 bg-red-100 text-red-700 p-4 rounded-lg text-xs tracking-widest'>
-                                    Ops, something went wrong. Try later.
-                                </div>
-                            )}
                         </Form>
                     </div>
                 </MiniWrapper>
