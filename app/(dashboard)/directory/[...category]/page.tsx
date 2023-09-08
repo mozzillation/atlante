@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 type Props = {
     params: {
@@ -35,7 +36,9 @@ const CategoryPage: React.FC<Props> = async ({ params }) => {
 
     return (
         <>
-            <CategoryDetails collection={collection} slug={slug} />
+            <Suspense fallback={<>loading..</>}>
+                <CategoryDetails collection={collection} slug={slug} />
+            </Suspense>
             <Suspense fallback={<AllWebsites />}>
                 <CategoryWebsites collection={collection} slug={slug} key={slug} />
             </Suspense>

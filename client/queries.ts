@@ -17,6 +17,8 @@ type SetBlurUrlProps = {
     asset_id: string
 }
 
+const WEBSITES_PER_PAGE = 2
+
 export const setBlurUrl = async ({ website_id, asset_id }: SetBlurUrlProps) => {
     if (!asset_id) throw new Error(`Failed to fetch ${asset_id}: no asset id provided`)
 
@@ -42,7 +44,7 @@ export const setBlurUrl = async ({ website_id, asset_id }: SetBlurUrlProps) => {
     }
 }
 
-export const getAllWebsitesQuery = async (): Promise<WebsiteWithSaves[]> => {
+export const getAllWebsitesQuery = async (page: number): Promise<WebsiteWithSaves[]> => {
     const session = await getServerSession(authOptions)
 
     return await prisma.website
@@ -58,6 +60,8 @@ export const getAllWebsitesQuery = async (): Promise<WebsiteWithSaves[]> => {
                     date_created: 'desc',
                 },
             ],
+            take: WEBSITES_PER_PAGE,
+            skip: page > 1 ? page * WEBSITES_PER_PAGE - WEBSITES_PER_PAGE : 0,
         })
         .then((res) => {
             if (session?.user.id) {
