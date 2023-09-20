@@ -1,10 +1,9 @@
 import { AllWebsites } from '@/components/organisms'
 import WebsitesSkeleton from '@/components/skeletons/websites'
-import Link from 'next/link'
 import { Suspense } from 'react'
 
 export const revalidate = 0
-export const dynamic = 'force-dynamic'
+export const dynamic = 'auto'
 
 type Props = {
     searchParams: {
@@ -18,7 +17,6 @@ const Home = async ({ searchParams }: Props) => {
     return (
         <Suspense fallback={<WebsitesSkeleton />}>
             <AllWebsites page={page} />
-            <Link href={`?page=2`}>Next</Link>
         </Suspense>
     )
 }
