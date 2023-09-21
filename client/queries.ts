@@ -175,15 +175,17 @@ export const toggleSave = async ({ website_id, isSaved }: ToggleSaveFunction) =>
 
     if (!website_id) throw 'Internal Error'
 
+    let action
+
     if (isSaved) {
-        const action = await prisma.save.deleteMany({
+        action = await prisma.save.deleteMany({
             where: {
                 website_id,
                 user_id: session.user.id,
             },
         })
     } else {
-        const action = await prisma.save.create({
+        action = await prisma.save.create({
             data: {
                 website_id,
                 user_id: session.user.id,
@@ -193,6 +195,7 @@ export const toggleSave = async ({ website_id, isSaved }: ToggleSaveFunction) =>
     }
 
     revalidatePath('/')
+    return action
     // revalidatePath('/me')
     // revalidatePath('/directory')
 }
@@ -217,7 +220,6 @@ export const getAllCategoriesQuery = async () => {
             },
         })
         .then((res) => {
-            console.log(res)
 
             const types = res.filter((category) => category.collection === 'type')
             const styles = res.filter((category) => category.collection === 'style')

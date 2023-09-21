@@ -1,6 +1,6 @@
 'use client'
 
-import { useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import { toggleSave } from '@/client/queries'
 import { Bookmark, BookmarkSimple, HeartStraight } from '@phosphor-icons/react'
@@ -28,16 +28,21 @@ const variants = {
 }
 
 const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
+    const [status, setStatus] = useState<boolean>(isSaved)
     const [isPending, startTransition] = useTransition()
 
     const handleSave = async () => {
         startTransition(async () => {
             if (!website_id) return
 
-            await toggleSave({
+            const res = await toggleSave({
                 website_id,
-                isSaved,
+                isSaved: status,
             })
+
+            if (res) {
+                setStatus((prev) => !prev)
+            }
         })
     }
 
@@ -48,7 +53,7 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
                 layout
                 transition={transition}
                 className={`${
-                    isSaved
+                    status
                         ? `bg-success text-success-foreground hover:bg-success/80 active:bg-success/70`
                         : `bg-muted text-muted-foreground hover:bg-muted/80 active:bg-muted/70`
                 } w-fit p-2 rounded-md text-xs transition-all tracking-wider select-none ${
@@ -56,7 +61,7 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
                 }`}
             >
                 <LayoutGroup>
-                    {isSaved && (
+                    {status && (
                         <motion.div layout className='w-max'>
                             <motion.div
                                 layout
@@ -72,7 +77,7 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
                         </motion.div>
                     )}
 
-                    {!isSaved && (
+                    {!status && (
                         <motion.div layout className='w-max'>
                             <motion.div
                                 layout
