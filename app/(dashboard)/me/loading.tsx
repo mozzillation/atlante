@@ -1,5 +1,3 @@
-'use client'
-
 import ProfileDetailsSkeleton from '@/components/skeletons/profile-details'
 import WebsitesSkeleton from '@/components/skeletons/websites'
 

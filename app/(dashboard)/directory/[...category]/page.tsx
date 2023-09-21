@@ -1,10 +1,7 @@
-import {
-    generateCategoriesSlugs,
-    getCategoryQuery,
-    getWebsitesByCategoryQuery,
-} from '@/client/queries'
+import { getCategoryQuery } from '@/client/queries'
 import { CategoryDetails } from '@/components/organisms'
-import InfiniteCategoryWebsites from '@/components/organisms/infinite-category-websites'
+import CategoryWebsites from '@/components/organisms/category-websites'
+import CategoryDetailsSkeleton from '@/components/skeletons/category-details'
 import WebsitesSkeleton from '@/components/skeletons/websites'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
@@ -36,32 +33,19 @@ export const generateMetadata = async ({ params }: Props) => {
     }
 }
 
-export const generateStaticParams = async () => {
-    const categories = await generateCategoriesSlugs()
-
-    return categories.map((category) => ({
-        category: [category.collection, category.slug],
-    }))
-}
-
 const CategoryPage: React.FC<Props> = async ({ params }) => {
     const collection = params.category[0] as 'style' | 'type'
     const slug = params.category[1] as string
 
-    const websites = await getWebsitesByCategoryQuery({ collection, slug, page: 1 })
+    if (!collection || !slug) notFound()
 
     return (
         <>
-            <Suspense fallback={<>loading..</>}>
-                <CategoryDetails collection={collection} slug={slug} />
+            <Suspense fallback={<CategoryDetailsSkeleton />}>
+                <CategoryDetails collection={collection} slug={slug} key='header' />
             </Suspense>
             <Suspense fallback={<WebsitesSkeleton />}>
-                <InfiniteCategoryWebsites
-                    collection={collection}
-                    slug={slug}
-                    key={slug}
-                    initialWebsites={websites}
-                />
+                <CategoryWebsites collection={collection} slug={slug} key='websites' />
             </Suspense>
         </>
     )

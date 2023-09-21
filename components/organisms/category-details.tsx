@@ -16,13 +16,13 @@ const CategoryDetails: React.FC<Props> = async ({ collection, slug }) => {
         <section id='category' data-id={category.id} className='py-4'>
             <div className='flex justify-center flex-col gap-10 items-center content-center'>
                 <MiniWrapper>
-                    <header className='tracking-wider'>
-                        <div className='text-xs text-tertiary leading-relaxed capitalize'>
+                    <header className='tracking-wider space-y-1'>
+                        <div className='text-xs text-tertiary capitalize'>
                             {category.collection}
                         </div>
-                        <h1 className='text-2xl leading-relaxed font-medium'>{category.name}</h1>
+                        <h1 className='text-2xl font-medium'>{category.name}</h1>
 
-                        <div className='text-lg text-secondary leading-relaxed'>
+                        <div className='text-lg text-secondary'>
                             A collection of {category._count.website_category}{' '}
                             {category.name.toLowerCase()}{' '}
                             {category._count.website_category !== 1 ? 'websites' : 'website'}.

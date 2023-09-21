@@ -1,4 +1,5 @@
 import { ProfileDetails, SavedWebsites } from '@/components/organisms'
+import { Suspense } from 'react'
 
 export const revalidate = 0
 export const dynamic = 'force-dynamic'
