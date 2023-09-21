@@ -24,18 +24,18 @@ const SingleWebsite: React.FC<Props> = async ({ id }) => {
         <section id='website' data-id={website.id} className='py-4'>
             <div className='flex justify-center flex-col space-y-4 items-center content-center'>
                 <MiniWrapper>
-                    <header className='tracking-wider'>
-                        <div className='text-xs text-tertiary leading-relaxed'>
+                    <header className='tracking-wider space-y-1'>
+                        <div className='text-xs text-tertiary'>
                             {dayjs(website.date_created).fromNow()}
                         </div>
-                        <h1 className='text-2xl leading-relaxed font-medium'>{website.name}</h1>
+                        <h1 className='text-2xl font-medium'>{website.name}</h1>
 
                         <div className=''>
                             <a
                                 href={`${website.url}/?ref=atlante.gallery`}
                                 target='_blank'
                                 rel='noreferrer noopener'
-                                className='text-lg text-secondary leading-relaxed transition-colors hover:text-accent'
+                                className='text-lg text-secondary transition-colors hover:text-accent'
                             >
                                 {website.url}
                             </a>

@@ -1,24 +1,13 @@
-import { AllWebsites } from '@/components/organisms'
-import WebsitesSkeleton from '@/components/skeletons/websites'
-import { Suspense } from 'react'
+import { getAllWebsitesQuery } from '@/client/queries'
+import InfiniteAllWebsites from '@/components/organisms/infinite-all-websites'
 
 export const revalidate = 0
-export const dynamic = 'auto'
+export const dynamic = 'force-dynamic'
 
-type Props = {
-    searchParams: {
-        page?: number
-    }
-}
+const Home = async () => {
+    const websites = await getAllWebsitesQuery(1)
 
-const Home = async ({ searchParams }: Props) => {
-    const { page } = searchParams
-
-    return (
-        <Suspense fallback={<WebsitesSkeleton />}>
-            <AllWebsites page={page} />
-        </Suspense>
-    )
+    return <InfiniteAllWebsites initialWebsites={websites} />
 }
 
 export default Home

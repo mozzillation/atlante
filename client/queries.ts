@@ -3,7 +3,7 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from './prisma'
 import { SaveWithWebsite, WebsiteWithSaves, WebsiteWithSavesAndCategories } from '@/types'
-import { directus_users } from '@prisma/client'
+import { directus_users, website } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
 import { notFound, redirect } from 'next/navigation'
@@ -12,12 +12,17 @@ import { getPlaiceholder } from 'plaiceholder'
 import { imageUrl } from '@/lib/image'
 import { randomUUID } from 'crypto'
 
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
+
 type SetBlurUrlProps = {
     website_id: string
     asset_id: string
 }
 
-const WEBSITES_PER_PAGE = 2
+const WEBSITES_PER_PAGE = 24
 
 export const setBlurUrl = async ({ website_id, asset_id }: SetBlurUrlProps) => {
     if (!asset_id) throw new Error(`Failed to fetch ${asset_id}: no asset id provided`)
@@ -175,24 +180,27 @@ export const toggleSave = async ({ website_id, isSaved }: ToggleSaveFunction) =>
 
     if (!website_id) throw 'Internal Error'
 
+    let action
+
     if (isSaved) {
-        const action = await prisma.save.deleteMany({
+        action = await prisma.save.deleteMany({
             where: {
                 website_id,
                 user_id: session.user.id,
             },
         })
     } else {
-        const action = await prisma.save.create({
+        action = await prisma.save.create({
             data: {
                 website_id,
                 user_id: session.user.id,
-                date_created: new Date(),
+                date_created: dayjs().utc(true).toISOString(),
             },
         })
     }
 
     revalidatePath('/')
+    return action
     // revalidatePath('/me')
     // revalidatePath('/directory')
 }
@@ -217,8 +225,6 @@ export const getAllCategoriesQuery = async () => {
             },
         })
         .then((res) => {
-            console.log(res)
-
             const types = res.filter((category) => category.collection === 'type')
             const styles = res.filter((category) => category.collection === 'style')
 
@@ -253,9 +259,14 @@ export const getCategoryQuery = async ({ collection, slug }: GetCategoryQueryPro
 type GetWebsitesByQueryProps = {
     collection: 'style' | 'type'
     slug: string
+    page: number
 }
 
-export const getWebsitesByCategoryQuery = async ({ collection, slug }: GetWebsitesByQueryProps) => {
+export const getWebsitesByCategoryQuery = async ({
+    collection,
+    slug,
+    page,
+}: GetWebsitesByQueryProps) => {
     const session = await getServerSession(authOptions)
 
     return await prisma.website
@@ -278,6 +289,8 @@ export const getWebsitesByCategoryQuery = async ({ collection, slug }: GetWebsit
             include: {
                 save: true,
             },
+            take: WEBSITES_PER_PAGE,
+            skip: page > 1 ? page * WEBSITES_PER_PAGE - WEBSITES_PER_PAGE : 0,
         })
         .then((res) => {
             if (session?.user.id) {
@@ -336,4 +349,19 @@ export const addSubmission = async (url: string) => {
         )
 
     return action
+}
+
+export const getWebsiteSitemap = async (): Promise<website[]> => {
+    const session = await getServerSession(authOptions)
+
+    return await prisma.website.findMany({
+        where: {
+            status: 'published',
+        },
+        orderBy: [
+            {
+                date_created: 'desc',
+            },
+        ],
+    })
 }

@@ -1,10 +1,6 @@
-import { getCategoryQuery, getWebsitesByCategoryQuery } from '@/client/queries'
-import { Grid, MiniWrapper, Wrapper } from '../layout'
-import { WebsiteCard } from '../cards'
-import CategoryWebsites from './category-websites'
-import { Suspense } from 'react'
+import { getCategoryQuery } from '@/client/queries'
+import { MiniWrapper } from '../layout'
 import { notFound } from 'next/navigation'
-import { AllWebsites } from '.'
 
 type Props = {
     collection: 'style' | 'type'
