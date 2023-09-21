@@ -12,6 +12,11 @@ import { getPlaiceholder } from 'plaiceholder'
 import { imageUrl } from '@/lib/image'
 import { randomUUID } from 'crypto'
 
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
+
 type SetBlurUrlProps = {
     website_id: string
     asset_id: string
@@ -189,7 +194,7 @@ export const toggleSave = async ({ website_id, isSaved }: ToggleSaveFunction) =>
             data: {
                 website_id,
                 user_id: session.user.id,
-                date_created: new Date(),
+                date_created: dayjs().utc(true).toISOString(),
             },
         })
     }

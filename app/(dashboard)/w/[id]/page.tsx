@@ -1,11 +1,9 @@
 import { getWebsiteQuery } from '@/client/queries'
 import { SingleWebsite } from '@/components/organisms'
-import GenericSkeleton from '@/components/skeletons/generic'
 import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
 
 export const revalidate = 0
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 type Props = {
     params: {
@@ -30,11 +28,7 @@ const WebsitePage: React.FC<Props> = async ({ params }) => {
 
     if (!id) notFound()
 
-    return (
-        <Suspense fallback={<GenericSkeleton />}>
-            <SingleWebsite id={id} />
-        </Suspense>
-    )
+    return <SingleWebsite id={id} />
 }
 
 export default WebsitePage

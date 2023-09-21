@@ -10,7 +10,9 @@ type Props = {
 const CategoryPill: React.FC<Props> = ({ name, slug, collection }) => {
     return (
         <Link href={`/directory/${collection}/${slug}`}>
-            <Button size='sm'>{name}</Button>
+            <Button size='sm' variant='ghost' className='bg-gray-50'>
+                {name}
+            </Button>
         </Link>
     )
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import WebsitesSkeleton from '@/components/skeletons/websites'
 
 const Loading = () => {

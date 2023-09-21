@@ -1,9 +1,7 @@
-'use client'
-
 import SingleWebsiteSkeleton from '@/components/skeletons/single-website'
 
-const Loading = () => {
+const Skeleton = () => {
     return <SingleWebsiteSkeleton />
 }
 
-export default Loading
+export default Skeleton
