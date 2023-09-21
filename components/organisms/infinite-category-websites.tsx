@@ -5,14 +5,16 @@ import { useInView } from 'react-intersection-observer'
 import { Grid, Wrapper } from '../layout'
 import { WebsiteCard } from '../cards'
 import { WebsiteWithSaves } from '@/types'
-import { getAllWebsitesQuery } from '@/client/queries'
+import { getWebsitesByCategoryQuery } from '@/client/queries'
 import InfiniteLoader from '../atoms/infinite-loader'
 
 type Props = {
     initialWebsites: WebsiteWithSaves[] | undefined
+    collection: 'style' | 'type'
+    slug: string
 }
 
-const InfiniteAllWebsites: React.FC<Props> = ({ initialWebsites }) => {
+const InfiniteCategoryWebsites: React.FC<Props> = ({ initialWebsites, collection, slug }) => {
     const [websites, setWebsites] = useState(initialWebsites)
     const [page, setPage] = useState(1)
     const [isEnd, setEnd] = useState<boolean>(false)
@@ -22,7 +24,11 @@ const InfiniteAllWebsites: React.FC<Props> = ({ initialWebsites }) => {
     useEffect(() => {
         const loadMore = async () => {
             const next = page + 1
-            const websites = await getAllWebsitesQuery(next)
+            const websites = await getWebsitesByCategoryQuery({
+                collection,
+                slug,
+                page: next,
+            })
 
             if (websites.length) {
                 setPage((prev) => prev + 1)
@@ -35,7 +41,7 @@ const InfiniteAllWebsites: React.FC<Props> = ({ initialWebsites }) => {
         if (inView && !isEnd) {
             loadMore()
         }
-    }, [inView, isEnd, page])
+    }, [inView, isEnd, page, slug, collection])
 
     return (
         <>
@@ -49,4 +55,4 @@ const InfiniteAllWebsites: React.FC<Props> = ({ initialWebsites }) => {
     )
 }
 
-export default InfiniteAllWebsites
+export default InfiniteCategoryWebsites

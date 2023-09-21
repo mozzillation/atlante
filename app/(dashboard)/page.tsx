@@ -5,15 +5,11 @@ import WebsitesSkeleton from '@/components/skeletons/websites'
 import { Suspense } from 'react'
 
 export const revalidate = 0
-export const dynamic = 'auto'
+export const dynamic = 'force-dynamic'
 
 const Home = async () => {
     const websites = await getAllWebsitesQuery(1)
-    return (
-        <Suspense fallback={<WebsitesSkeleton />}>
-            <InfiniteAllWebsites initialWebsites={websites} />
-        </Suspense>
-    )
+    return <InfiniteAllWebsites initialWebsites={websites} />
 }
 
 export default Home

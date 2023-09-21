@@ -56,7 +56,7 @@ const SaveButton: React.FC<Props> = ({ website_id, isSaved }) => {
                     status
                         ? `bg-success text-success-foreground hover:bg-success/80 active:bg-success/70`
                         : `bg-muted text-muted-foreground hover:bg-muted/80 active:bg-muted/70`
-                } w-fit p-2 rounded-md text-xs transition-all tracking-wider select-none ${
+                } w-auto p-2 rounded-md text-xs transition-all tracking-wider select-none ${
                     isPending ? `animate-pulse cursor-wait pointer-events-none` : `cursor-pointer`
                 }`}
             >
