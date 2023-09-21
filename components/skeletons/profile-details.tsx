@@ -7,7 +7,7 @@ const ProfileDetailsSkeleton = () => {
             <MiniWrapper>
                 <div className='flex gap-4 flex-row items-center content-center'>
                     <div>
-                        <Skeleton className='w-20 h-20' />
+                        <Skeleton className='w-20 h-20 rounded-full' />
                     </div>
                     <div>
                         <Skeleton className='w-32 h-7' />

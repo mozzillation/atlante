@@ -17,7 +17,7 @@ type SetBlurUrlProps = {
     asset_id: string
 }
 
-const WEBSITES_PER_PAGE = 1
+const WEBSITES_PER_PAGE = 24
 
 export const setBlurUrl = async ({ website_id, asset_id }: SetBlurUrlProps) => {
     if (!asset_id) throw new Error(`Failed to fetch ${asset_id}: no asset id provided`)

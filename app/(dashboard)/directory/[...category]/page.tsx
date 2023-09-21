@@ -9,8 +9,9 @@ import WebsitesSkeleton from '@/components/skeletons/websites'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
-export const dynamic = 'force-dynamic'
 export const revalidate = 0
+export const dynamicParams = true
+export const dynamic = 'force-dynamic'
 
 type Props = {
     params: {
