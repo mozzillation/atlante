@@ -1,8 +1,8 @@
-import { getAllWebsitesQuery } from '@/client/queries'
+import { getWebsiteSitemap } from '@/client/queries'
 import { getServerSideSitemap } from 'next-sitemap'
 
 export const GET = async (request: Request) => {
-    const websites = await getAllWebsitesQuery()
+    const websites = await getWebsiteSitemap()
 
     return getServerSideSitemap(
         websites.map((website) => {

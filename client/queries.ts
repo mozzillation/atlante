@@ -3,7 +3,7 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from './prisma'
 import { SaveWithWebsite, WebsiteWithSaves, WebsiteWithSavesAndCategories } from '@/types'
-import { directus_users } from '@prisma/client'
+import { directus_users, website } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
 import { notFound, redirect } from 'next/navigation'
@@ -220,7 +220,6 @@ export const getAllCategoriesQuery = async () => {
             },
         })
         .then((res) => {
-
             const types = res.filter((category) => category.collection === 'type')
             const styles = res.filter((category) => category.collection === 'style')
 
@@ -338,4 +337,19 @@ export const addSubmission = async (url: string) => {
         )
 
     return action
+}
+
+export const getWebsiteSitemap = async (): Promise<website[]> => {
+    const session = await getServerSession(authOptions)
+
+    return await prisma.website.findMany({
+        where: {
+            status: 'published',
+        },
+        orderBy: [
+            {
+                date_created: 'desc',
+            },
+        ],
+    })
 }
